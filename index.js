@@ -16,7 +16,7 @@ async function runLogic(src, acceptedFileExtensions, tags2Parse) {
         const isFile = stats.isFile();
         const isDirectory = stats.isDirectory();
         let filePaths = [];
-        //If it's a directory then get all the filePaths after normalizing
+        //If it's a directory, then get all the filePaths after normalizing
         if (isDirectory) {
             const fileNames = await fsp.readdir(src);
             filePaths = fileNames.map(fname => {
