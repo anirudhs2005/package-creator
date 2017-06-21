@@ -2,10 +2,10 @@ const xml2objectPromiseMaker = require('./scripts/xml2objectPromise');
 const csv2ObjectPromiseMaker = require('./scripts/csv2ObjectPromise');
 const promisify = require('promisify-node');
 const fsp = promisify('fs');
-const path = require('path')
+const path = require('path');
 
 
-const sourcePath = './inputs/buildnotes.csv';
+const sourcePath = './inputs/.';
 const acceptedFileExtensions = new Set(['.xml', '.csv']);
 async function runLogic(src, acceptedFileExtensions, tags2Parse) {
     try {
@@ -40,6 +40,7 @@ async function runLogic(src, acceptedFileExtensions, tags2Parse) {
             const extension = path.extname(fpath);
             return acceptedFileExtensions.has(extension);
         });
+        //Initiate file parsings based on file extension.
         let allPromises = [];
         filePaths.forEach((fpath) => {
             const extname = path.extname(fpath);
@@ -55,7 +56,10 @@ async function runLogic(src, acceptedFileExtensions, tags2Parse) {
                 allPromises.push(csv2ObjectPromise);
             }
         });
-        //Each ParseResult
+        
+
+        //When ALL the promises are resolved, we have the list of results in the callbacks
+        
         const parseResults = await Promise.all(allPromises);
         parseResults.forEach(parseResult => {
             console.log('FilePath',parseResult.filePath);
