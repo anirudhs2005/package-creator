@@ -1,7 +1,7 @@
 const xml2object = require('xml2object'),
     fs = require('fs');
 
-function csvReader(tags, filePath,resolve,reject) {
+function xmlReader(tags, filePath,resolve,reject) {
     let xmlReadResult = {
             filePath,
             data: [],
@@ -43,7 +43,7 @@ function csvReader(tags, filePath,resolve,reject) {
     }
 }
 
-function xml2ObjectPromiseMaker(tags, filePath,customParser=csvReader) {
+function xml2ObjectPromiseMaker({tags=['types','version'],filePath,customParser=xmlReader}) {
     
     let xml2objectPromise = new Promise(function(resolve, reject) {
          

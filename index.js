@@ -1,12 +1,12 @@
 const xml2objectPromiseMaker = require('./scripts/xml2objectPromise');
+const csv2ObjectPromiseMaker = require('./scripts/csv2ObjectPromise');
 const promisify = require('promisify-node');
 const fsp = promisify('fs');
 const path = require('path')
 
 
-const sourcePath = './inputs/';
+const sourcePath = './inputs/buildnotes.csv';
 const acceptedFileExtensions = new Set(['.xml', '.csv']);
-const tags2Parse = ['types', 'version'];
 async function runLogic(src, acceptedFileExtensions, tags2Parse) {
     try {
         //Check for File Existence/ Read permissions
@@ -44,25 +44,28 @@ async function runLogic(src, acceptedFileExtensions, tags2Parse) {
         filePaths.forEach((fpath) => {
             const extname = path.extname(fpath);
             if (extname === '.xml') {
-                const xml2ObjPromise = xml2objectPromiseMaker(tags2Parse, fpath);
+            	//Instantiate XMl Parser when file is of type XML
+                const xml2ObjPromise = xml2objectPromiseMaker({filePath:fpath});
                 allPromises.push(xml2ObjPromise);
 
             }
             if (extname === '.csv') {
-                //TO DO. Write a CSV Parser with promise
+                //Instantiate CSV Parser when file is of type CSV
+                const csv2ObjectPromise = csv2ObjectPromiseMaker({filePath:fpath});
+                allPromises.push(csv2ObjectPromise);
             }
         });
         //Each ParseResult
         const parseResults = await Promise.all(allPromises);
         parseResults.forEach(parseResult => {
-            console.log(parseResult.filePath);
-            console.log(parseResult.data);
-            console.log(parseResult.version);
+            console.log('FilePath',parseResult.filePath);
+            console.log('Data',parseResult.data);
+            console.log('version', parseResult.version);
         });
 
     } catch (err) {
-        console.log('Haha', err);
+        console.log('We have an ERROR', err);
     }
 }
 
-runLogic(sourcePath, acceptedFileExtensions, tags2Parse);
+runLogic(sourcePath, acceptedFileExtensions);
