@@ -4,6 +4,8 @@
         <members>xyzsite1</members>
         <members>xyzsite2</members>
         <members>xyzsite3</members>
+        <members>xyzsite5  </members>
+        <members>xyzsite5  </members>
         <name>SiteDotCom</name>
     </types>
 
@@ -13,5 +15,8 @@
         <members>Opportunity</members> -->
         <name>CustomObject</name>
     </types>
+  
+
+    
     <version>30.0</version>
 </Package>

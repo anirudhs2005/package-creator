@@ -1,13 +1,18 @@
 const xml2objectPromiseMaker = require('./scripts/xml2objectPromise');
 const csv2ObjectPromiseMaker = require('./scripts/csv2ObjectPromise');
+const preProcessorPromiseMaker = require('./scripts/preprocessorPromise');
+
+
 const promisify = require('promisify-node');
+const {constants} = require('./scripts/constantsStore');
+
 const fsp = promisify('fs');
 const path = require('path');
 
 
-const sourcePath = './inputs/.';
+const sourcePath = './inputs/';
 const acceptedFileExtensions = new Set(['.xml', '.csv']);
-async function runLogic(src, acceptedFileExtensions, tags2Parse) {
+async function runLogic(src, acceptedFileExtensions) {
     try {
         //Check for File Existence/ Read permissions
         await fsp.access(src, fsp.constants.R_OK);
@@ -44,13 +49,13 @@ async function runLogic(src, acceptedFileExtensions, tags2Parse) {
         let allPromises = [];
         filePaths.forEach((fpath) => {
             const extname = path.extname(fpath);
-            if (extname === '.xml') {
+            if (extname === constants.XML) {
             	//Instantiate XMl Parser when file is of type XML
                 const xml2ObjPromise = xml2objectPromiseMaker({filePath:fpath});
                 allPromises.push(xml2ObjPromise);
 
             }
-            if (extname === '.csv') {
+            if (extname === constants.CSV) {
                 //Instantiate CSV Parser when file is of type CSV
                 const csv2ObjectPromise = csv2ObjectPromiseMaker({filePath:fpath});
                 allPromises.push(csv2ObjectPromise);
@@ -61,14 +66,20 @@ async function runLogic(src, acceptedFileExtensions, tags2Parse) {
         //When ALL the promises are resolved, we have the list of results in the callbacks
         
         const parseResults = await Promise.all(allPromises);
-        parseResults.forEach(parseResult => {
-            console.log('FilePath',parseResult.filePath);
-            console.log('Data',parseResult.data);
+        let preprocessorPromises = [];
+         parseResults.forEach(parseResult => {
+             preprocessorPromises.push(new preProcessorPromiseMaker(parseResult));
+        });
+        //Wait for the filtered results
+        const processedParseResults = await Promise.all(preprocessorPromises);
+        processedParseResults.forEach(parseResult =>{
+            console.log('File Path', parseResult.filePath);
+            console.log('Cleansed Data',parseResult.data);
             console.log('version', parseResult.version);
         });
 
     } catch (err) {
-        console.log('We have an ERROR', err);
+        console.log('We have an ERROR\n', err.code,err.filePath,err.message);
     }
 }
 
