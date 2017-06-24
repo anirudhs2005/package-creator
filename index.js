@@ -4,6 +4,7 @@ const xml2objectPromiseMaker = require('./scripts/xml2objectPromise');
 const csv2ObjectPromiseMaker = require('./scripts/csv2ObjectPromise');
 const preProcessorPromiseMaker = require('./scripts/preprocessorPromise');
 const {constants} = require('./scripts/constantsStore');
+const {describeMetadataPromise} = require('./scripts/describeMetadataPromise');
 
 
 
@@ -12,6 +13,8 @@ const sourcePath = './inputs/';
 const acceptedFileExtensions = new Set(['.xml', '.csv']);
 async function runLogic(src, acceptedFileExtensions) {
     try {
+        const describeResult= await describeMetadataPromise();
+        
         //Check for File Existence/ Read permissions
         await fsp.access(src, fsp.constants.R_OK);
         //Get the stats of your source
@@ -76,8 +79,10 @@ async function runLogic(src, acceptedFileExtensions) {
             console.log('version', parseResult.version);
         });
 
+
+
     } catch (err) {
-        console.log('We have an ERROR\n', err.code,err.filePath,err.message);
+        console.log(err.code,err.filePath,err.message);
     }
 }
 

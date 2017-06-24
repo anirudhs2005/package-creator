@@ -4,13 +4,25 @@ const dotenv = require('dotenv').config({
 });
 const {
     constants
-} = require('./scripts/constantsStore');
+} = require('./constantsStore');
 const {
     CustomError
-} = require('./scripts/errorGenerator');
+} = require('./errorGenerator');
 
+/**
+ * [doLogin description]
+ * @param  {[type]} config  [
+            username = username,
+            password = usern,
+            instanceUrl = either login url or anything else,
+            accessToken = If you already have the token, then please enjoy this
+        }]
+ * @param  {[type]} resolve [resolver object of the initial promise]
+ * @param  {[type]} reject  [rejector]
+ * @return {[type]} {connection,userInfo}    [description]
+ */
+async function doLogin(config, resolve, reject) {
 
-function doLogin(config, resolve, reject) {
     try {
         const {
             username,
@@ -18,26 +30,57 @@ function doLogin(config, resolve, reject) {
             instanceUrl,
             accessToken
         } = config;
+        console.log('Logging into Salesforce', username, password, instanceUrl);
 
-
-        if (!((username && password) || accessToken) && !instanceUrl) {
+        if (!((username && password) || accessToken) || !instanceUrl) {
             const {
                 NULL_LOGIN_CREDENTIALS,
                 NULL_LOGIN_CREDENTIALS_MESSAGE
+
             } = constants;
             throw new CustomError(NULL_LOGIN_CREDENTIALS, NULL_LOGIN_CREDENTIALS_MESSAGE);
+
         }
 
-        //TO DO : activity of login and design for new login
-       
+        if (username && password && accessToken) {
+            const {
+                INVALID_MIXTUREOF_CREDENTIALS,
+                INVALID_MIXTUREOF_CREDENTIALS_MESSAGE
+            } = constants;
+            throw new CustomError(INVALID_MIXTUREOF_CREDENTIALS, INVALID_MIXTUREOF_CREDENTIALS_MESSAGE);
+        }
+
+
+        let newConnection;
+        if (username && password) {
+            newConnection = new jsforce.Connection({
+                loginUrl: instanceUrl
+            });
+            await newConnection.login(username, password);
+
+
+        } else {
+            newConnection = new jsforce.Connection({
+                accessToken,
+                instanceUrl
+            });
+        }
+
+
+        console.log(`Successfully logged into Salesforce ${username}`);
+        resolve({
+            connection: newConnection
+        });
+
+
+
+
+
+
     } catch (err) {
         reject(err);
     }
 }
-
-
-
-
 
 
 function loginPromiseMaker({
@@ -45,9 +88,19 @@ function loginPromiseMaker({
     password = process.env.SF_PASSWORD,
     instanceUrl = process.env.SF_LOGIN_URL,
     accessToken = process.env.SF_ACCESS_TOKEN
+} = {
+    username: process.env.SF_USER_NAME,
+    password: process.env.SF_PASSWORD,
+    instanceUrl: process.env.SF_LOGIN_URL,
+    accessToken: process.env.SF_ACCESS_TOKEN
 }) {
     const loginPromise = new Promise(function(resolve, reject) {
-
+        doLogin({
+            username,
+            password,
+            instanceUrl,
+            accessToken
+        }, resolve, reject);
     });
     return loginPromise;
 }
