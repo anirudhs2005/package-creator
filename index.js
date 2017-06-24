@@ -1,15 +1,13 @@
+const promisify = require('promisify-node');
+const path = require('path');
 const xml2objectPromiseMaker = require('./scripts/xml2objectPromise');
 const csv2ObjectPromiseMaker = require('./scripts/csv2ObjectPromise');
 const preProcessorPromiseMaker = require('./scripts/preprocessorPromise');
-
-
-const promisify = require('promisify-node');
 const {constants} = require('./scripts/constantsStore');
 
+
+
 const fsp = promisify('fs');
-const path = require('path');
-
-
 const sourcePath = './inputs/';
 const acceptedFileExtensions = new Set(['.xml', '.csv']);
 async function runLogic(src, acceptedFileExtensions) {
@@ -70,7 +68,7 @@ async function runLogic(src, acceptedFileExtensions) {
          parseResults.forEach(parseResult => {
              preprocessorPromises.push(new preProcessorPromiseMaker(parseResult));
         });
-        //Wait for the filtered results
+        //Wait for the filtered results.
         const processedParseResults = await Promise.all(preprocessorPromises);
         processedParseResults.forEach(parseResult =>{
             console.log('File Path', parseResult.filePath);

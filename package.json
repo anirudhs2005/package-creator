@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/anirudhs2005/package-creator#readme",
   "dependencies": {
+    "dotenv": "^4.0.0",
     "fast-csv": "^2.4.0",
+    "jsforce": "^1.8.0",
     "promisify-node": "^0.4.0",
     "xml2object": "^0.1.2"
   }
