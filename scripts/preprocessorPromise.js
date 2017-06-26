@@ -11,7 +11,7 @@ function defaultCleanser(parseResult,resolve,reject){
 			 * If all these are fine, then remove trailing spaces from the type and members.
 			 * Also replace members with unique members
 			 */
-			const spaceRegex = /\s/g;
+			const spaceRegex = constants.SPACE_REGEX;
 			let {data=[],filePath,version} = parseResult;
 			
 			if(data.length==0){

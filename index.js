@@ -5,15 +5,15 @@ const csv2ObjectPromiseMaker = require('./scripts/csv2ObjectPromise');
 const preProcessorPromiseMaker = require('./scripts/preprocessorPromise');
 const {constants} = require('./scripts/constantsStore');
 const {describeMetadataPromise} = require('./scripts/describeMetadataPromise');
-
-
-
+const {validateMedataPromiseMaker} = require('./scripts/validateFileContentsPromise');
 const fsp = promisify('fs');
+
+
 const sourcePath = './inputs/';
-const acceptedFileExtensions = new Set(['.xml', '.csv']);
+const acceptedFileExtensions = new Set([constants.XML, constants.CSV]);
 async function runLogic(src, acceptedFileExtensions) {
     try {
-        const describeResult= await describeMetadataPromise();
+       
         
         //Check for File Existence/ Read permissions
         await fsp.access(src, fsp.constants.R_OK);
@@ -78,11 +78,24 @@ async function runLogic(src, acceptedFileExtensions) {
             console.log('Cleansed Data',parseResult.data);
             console.log('version', parseResult.version);
         });
+        //Describe Metadata of the target org you are trying to deploy
+        const describeMetadataResult= await describeMetadataPromise();
+        const folderStructureCreationResult = await fsp.writeFile(`./config/${constants.FOLDER_STRUCTURE_FILE}`,JSON.stringify(describeMetadataResult,null,'\t'));
+        
+        const {metadataObjects} = describeMetadataResult;
+        //Validate all the types against metadataObjects
+        const {areTypesValid} = await validateMedataPromiseMaker(metadataObjects,processedParseResults);
+        
+        if(areTypesValid){
+
+        }
 
 
 
     } catch (err) {
-        console.log(err.code,err.filePath,err.message);
+        console.log(err.code,err.message,err.type,err.index,err.filePath);
+        //console.log(err.stack);
+
     }
 }
 

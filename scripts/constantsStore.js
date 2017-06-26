@@ -11,6 +11,7 @@ SF_LOGIN_URL=
 SF_ACCESS_TOKEN=
 SF_RETRIEVE_VERSION=
 `;
+cp.SPACE_REGEX=/\s/g
 cp.XML = '.xml';
 cp.CSV ='.csv';
 cp.NO_DATA = 'NO_DATA';
@@ -34,5 +35,10 @@ cp.INVALID_MIXTUREOF_CREDENTIALS_MESSAGE = 'Cannot have both username-password a
 cp.INVALID_RETRIEVE_VERSION='INVALID_RETRIEVE_VERSION';
 cp.INVALID_RETRIEVE_VERSION_MESSAGE = 'Please specify a version to metadata to retrieve inside config/vars.env';
 cp.FOLDER_STRUCTURE_FILE= 'folderStructure.json';
-
+cp.INVALID_METADATA = 'INVALID_METADATA';
+cp.INVALID_METADATA_MESSAGE = 'Either metadata is empty or not defined. Please check if you have called the describeMetadata method';
+cp.INVALID_PARSE_RESULTS = 'INVALID_PARSE_RESULTS';
+cp.INVALID_PARSE_RESULTS_MESSAGE = 'Parse Results is empty. Please pass a non-empty array of results to be validated';
+cp.INVALID_TYPE='INVALID_TYPE';
+cp.INVALID_TYPE_MESSAGE = 'The Type you have mentioned isn\'t present in the org you are deploying to. Please check the xml name of the folderStructure.json file';
 exports.constants = new constantsStore();
