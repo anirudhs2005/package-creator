@@ -21,7 +21,7 @@ const {
  * @param  {[type]} reject  [rejector]
  * @return {[type]} {connection,userInfo}    [description]
  */
-async function doLogin(config, resolve, reject) {
+async function doLogin(config) {
 
     try {
         const {
@@ -68,9 +68,9 @@ async function doLogin(config, resolve, reject) {
 
 
         console.log(`Successfully logged into Salesforce ${username}`);
-        resolve({
+        return {
             connection: newConnection
-        });
+        };
 
 
 
@@ -78,7 +78,7 @@ async function doLogin(config, resolve, reject) {
 
 
     } catch (err) {
-        reject(err);
+        throw err;
     }
 }
 
@@ -94,15 +94,12 @@ function loginPromiseMaker({
     instanceUrl: process.env.SF_LOGIN_URL,
     accessToken: process.env.SF_ACCESS_TOKEN
 }) {
-    const loginPromise = new Promise(function(resolve, reject) {
-        doLogin({
+    return doLogin({
             username,
             password,
             instanceUrl,
             accessToken
-        }, resolve, reject);
-    });
-    return loginPromise;
+        });
 }
 
 module.exports.loginPromiseMaker = loginPromiseMaker;

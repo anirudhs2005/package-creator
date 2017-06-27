@@ -6,10 +6,12 @@ const preProcessorPromiseMaker = require('./scripts/preprocessorPromise');
 const {constants} = require('./scripts/constantsStore');
 const {describeMetadataPromise} = require('./scripts/describeMetadataPromise');
 const {validateMedataPromiseMaker} = require('./scripts/validateFileContentsPromise');
+const {createFoldersPromiseMaker} = require('./scripts/createFoldersPromise');
+const {consolidateParseResultsPromiseMaker} = require('./scripts/consolidateParseResultsPromise');
 const fsp = promisify('fs');
 
 
-const sourcePath = './inputs/';
+const sourcePath = './inputs/.';
 const acceptedFileExtensions = new Set([constants.XML, constants.CSV]);
 async function runLogic(src, acceptedFileExtensions) {
     try {
@@ -83,19 +85,18 @@ async function runLogic(src, acceptedFileExtensions) {
         const folderStructureCreationResult = await fsp.writeFile(`./config/${constants.FOLDER_STRUCTURE_FILE}`,JSON.stringify(describeMetadataResult,null,'\t'));
         
         const {metadataObjects} = describeMetadataResult;
+
         //Validate all the types against metadataObjects
         const {areTypesValid} = await validateMedataPromiseMaker(metadataObjects,processedParseResults);
-        
-        if(areTypesValid){
-
-        }
-
+        console.log(areTypesValid);
+        const {consolidatedData}= await consolidateParseResultsPromiseMaker(processedParseResults);
+        console.log(consolidatedData);
+        const foldersCreationResult = await createFoldersPromiseMaker({metadata : metadataObjects,consolidatedParseResults:consolidatedData});
+        console.log(foldersCreationResult);
 
 
     } catch (err) {
         console.log(err.code,err.message,err.type,err.index,err.filePath);
-        //console.log(err.stack);
-
     }
 }
 

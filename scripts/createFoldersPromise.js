@@ -1,3 +1,5 @@
+const promisify = require('promisify-node');
+const fsp = promisify('fs');
 const {
     constants
 } = require('./constantsStore');
@@ -8,6 +10,7 @@ const {
 const dotenv = require('dotenv').config({
     path: './config/vars.env'
 });
+
 
 
 const path = require('path');
@@ -21,7 +24,11 @@ async function createFolders(config, resolve, reject) {
             metadata,
             consolidatedParseResults
         } = config;
-
+        
+        const programOutputFolder = process.env.SF_PROGRAM_OUTPUT_FOLDER;
+        const deploymentPackageFolder = process.env.SF_TO_DEPLOY_FOLDER_NAME;
+      
+        //TO DO : Validate deploymentPackageFolder,programOutputFolder
         /**
          * 1. Find the folders to create
          * 2. 
@@ -31,18 +38,34 @@ async function createFolders(config, resolve, reject) {
         	metadataByXmlName.set(mdata.xmlName,mdata);
         });
         let folders2Create = new Set();
-        consolidatedParseResults.forEach(({type,members}, i) => {
+
+        for(const [type,members] of consolidatedParseResults){
         	const {directoryName,inFolder,metaFile,suffix} = metadataByXmlName.get(type);
         	folders2Create.add(directoryName);
-        });
-        
-        const targetPath = `../outputs/deployments/`
+        }
+       
+        folders2Create = [...folders2Create];
+
+        const targetPath = `${programOutputFolder}/${deploymentPackageFolder}`;
+        const resolvedTargetPath = path.resolve(targetPath);
+        await fsp.mkdir(resolvedTargetPath);
+        const folderCreationResults = await Promise.all(folders2Create.map(async folder =>{
+        	const folderPath =path.resolve(`${resolvedTargetPath}/${folder}`);
+        	await fsp.mkdir(folderPath);
+        	return `Created ${folderPath}`;
+        }));
+
+        return folderCreationResults;
+
+     	
 
 
     } catch (err) {
-        reject(err);
+        throw err;
     }
 }
+
+
 
 function createFoldersPromiseMaker({
     source = process.env.SF_PACKAGE_SOURCE,
@@ -55,14 +78,12 @@ function createFoldersPromiseMaker({
     metadata: [],
     consolidatedParseResults: []
 }) {
-    const createFoldersPromise = new Promise((resolve, reject) => {
-        createFolders({
+    return createFolders({
             source,
             target,
+            metadata,
             consolidatedParseResults
-        }, resolve, reject);
-    });
-    return createFoldersPromise;
+        });
 }
 
 module.exports.createFoldersPromiseMaker = createFoldersPromiseMaker;

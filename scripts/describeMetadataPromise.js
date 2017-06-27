@@ -13,7 +13,7 @@ const dotenv = require('dotenv').config({
 });
 
 
-async function describeMetadataProcess(config, resolve, reject) {
+async function describeMetadataProcess(config) {
     try {
         const {
             version
@@ -29,12 +29,12 @@ async function describeMetadataProcess(config, resolve, reject) {
         const {connection} = await loginPromiseMaker();
         const describeResult = await connection.metadata.describe(version);
         
-        resolve(describeResult);
+        return describeResult;
 
 
 
     } catch (err) {
-        reject(err);
+        throw err;
     }
 }
 
@@ -43,12 +43,8 @@ function describeMetadataPromiseMaker({
 } = {
     version: process.env.SF_RETRIEVE_VERSION
 }) {
-    const describeMetadataPromise = new Promise(function(resolve, reject) {
-        describeMetadataProcess({
-            version
-        }, resolve, reject)
-    });
-    return describeMetadataPromise;
+   
+    return describeMetadataProcess({version});
 }
 
 module.exports.describeMetadataPromise = describeMetadataPromiseMaker;
