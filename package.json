@@ -22,6 +22,7 @@
     "fast-csv": "^2.4.0",
     "jsforce": "^1.8.0",
     "promisify-node": "^0.4.0",
+    "quickly-copy-file": "^1.0.0",
     "xml2object": "^0.1.2"
   }
 }

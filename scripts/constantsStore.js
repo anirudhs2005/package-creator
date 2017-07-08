@@ -41,4 +41,11 @@ cp.INVALID_PARSE_RESULTS = 'INVALID_PARSE_RESULTS';
 cp.INVALID_PARSE_RESULTS_MESSAGE = 'Parse Results is empty. Please pass a non-empty array of results to be validated';
 cp.INVALID_TYPE='INVALID_TYPE';
 cp.INVALID_TYPE_MESSAGE = 'The Type you have mentioned isn\'t present in the org you are deploying to. Please check the xml name of the folderStructure.json file';
+cp.FOLDER_PATH_INVALID = 'FOLDER_PATH_INVALID';
+cp.FOLDER_PATH_INVALID_MESSAGE  =`Invalid syntax for folder path. 
+Give the folder name of the component followed by / and fileName
+Example: unfiled$public/MyReport`;
+cp.META_XML= '-meta.xml';
+
+
 exports.constants = new constantsStore();
