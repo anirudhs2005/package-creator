@@ -12,21 +12,29 @@ const {
 const {
     validateMedataPromiseMaker
 } = require('./scripts/validateFileContentsPromise');
-const {
-    createFoldersPromiseMaker
-} = require('./scripts/createFoldersPromise');
+
 const {
     consolidateParseResultsPromiseMaker
 } = require('./scripts/consolidateParseResultsPromise');
+
+const {
+    createFoldersPromiseMaker
+} = require('./scripts/createFoldersAndFilesPromise');
+
+const dotenv = require('dotenv').config({
+    path: './config/vars.env'
+});
+
 const fsp = promisify('fs');
+const fse = require('fs-extra');
 
-
-const sourcePath = './inputs/package.xml';
+const sourcePath = path.resolve(path.join(__dirname,process.env.SF_PACKAGE_XML_BUILD_NOTES_SOURCE));
 const acceptedFileExtensions = new Set([constants.XML, constants.CSV]);
-async function runLogic(src, acceptedFileExtensions) {
+
+
+async function createDeployablePackage(src, acceptedFileExtensions) {
     try {
-
-
+        
         //Check for File Existence/ Read permissions
         await fsp.access(src, fsp.constants.R_OK);
         //Get the stats of your source
@@ -89,11 +97,7 @@ async function runLogic(src, acceptedFileExtensions) {
         });
         //Wait for the filtered results.
         const processedParseResults = await Promise.all(preprocessorPromises);
-        processedParseResults.forEach(parseResult => {
-            console.log('File Path', parseResult.filePath);
-            console.log('Cleansed Data', parseResult.data);
-            console.log('version', parseResult.version);
-        });
+        
         //Describe Metadata of the target org you are trying to deploy
         const describeMetadataResult = await describeMetadataPromise();
         const folderStructureCreationResult = await fsp.writeFile(`./config/${constants.FOLDER_STRUCTURE_FILE}`, JSON.stringify(describeMetadataResult, null, '\t'));
@@ -106,30 +110,29 @@ async function runLogic(src, acceptedFileExtensions) {
         const {
             areTypesValid
         } = await validateMedataPromiseMaker(metadataObjects, processedParseResults);
-        console.log('Mentioned types are --->' + areTypesValid);
+        //Consolidate all results from all files
         const {
             consolidatedData
         } = await consolidateParseResultsPromiseMaker(processedParseResults);
-        console.log(consolidatedData);
-        const allResults = await createFoldersPromiseMaker({
+        //
+        const packageCreationResult = await createFoldersPromiseMaker({
             metadata: metadataObjects,
             consolidatedParseResults: consolidatedData
         });
-        console.log(allResults);
-        return allResults;
+        return packageCreationResult;
 
 
     } catch (err) {
         throw err;
     }
 }
+//Consume code
+createDeployablePackage(sourcePath, acceptedFileExtensions)
+    .then((packageCreationResult) => {
+        console.log(packageCreationResult);
+    })
+    .catch((err) => {
+        console.log(err);
+       
 
-process.nextTick(function() {
-    runLogic(sourcePath, acceptedFileExtensions)
-        .then((d) => {
-            console.log(d);
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-})
+    });

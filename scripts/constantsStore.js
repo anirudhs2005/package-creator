@@ -10,6 +10,10 @@ SF_PASSWORD=
 SF_LOGIN_URL=
 SF_ACCESS_TOKEN=
 SF_RETRIEVE_VERSION=
+SF_PACKAGE_XML_BUILD_NOTES_SOURCE=
+SF_PACKAGE_SOURCE=
+SF_PROGRAM_OUTPUT_FOLDER=
+SF_TO_DEPLOY_FOLDER_NAME=
 `;
 cp.SPACE_REGEX=/\s/g
 cp.XML = '.xml';
@@ -46,6 +50,8 @@ cp.FOLDER_PATH_INVALID_MESSAGE  =`Invalid syntax for folder path.
 Give the folder name of the component followed by / and fileName
 Example: unfiled$public/MyReport`;
 cp.META_XML= '-meta.xml';
+cp.INVALID_FILE_PATH = 'INVALID_FILE_PATH';
+cp.INVALID_FILE_PATH_MESSAGE = `File path doesn't exist!`;
 
 
 exports.constants = new constantsStore();
