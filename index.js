@@ -35,7 +35,10 @@ const acceptedFileExtensions = new Set([constants.XML, constants.CSV]);
 
 async function createDeployablePackage(src, acceptedFileExtensions) {
     try {
+        const inputSourcePath = path.resolve(`${process.env.SF_PACKAGE_SOURCE}`);
+        await fse.ensureDir(inputSourcePath);
         const outputPath = path.resolve(`${process.env.SF_PROGRAM_OUTPUT_FOLDER}${process.env.SF_TO_DEPLOY_FOLDER_NAME}`);
+        await fse.emptyDir(outputPath);
         await fse.ensureDir(outputPath);
         //Check for File Existence/ Read permissions
         await fsp.access(src, fsp.constants.R_OK);

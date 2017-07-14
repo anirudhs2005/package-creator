@@ -15,8 +15,9 @@
         <name>CustomObject</name>
     </types> -->
   <types>
-      <members>HSvc_ActivityTypeAccessor</members>
-      <members>HSvc_PicklistController</members>
+      <!-- <members>HSvc_ActivityTypeAccessor</members>
+      <members>HSvc_PicklistController</members> -->
+      <members>CaseManagementAPIRequestHandler</members>
       <name>ApexClass</name>
   </types>
 
