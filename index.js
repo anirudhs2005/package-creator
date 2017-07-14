@@ -25,6 +25,7 @@ const dotenv = require('dotenv').config({
     path: './config/vars.env'
 });
 
+const {generatePackageXMLPromiseMaker} = require('./scripts/generatePackageXMLPromiseMaker');
 const fsp = promisify('fs');
 const fse = require('fs-extra');
 
@@ -34,7 +35,8 @@ const acceptedFileExtensions = new Set([constants.XML, constants.CSV]);
 
 async function createDeployablePackage(src, acceptedFileExtensions) {
     try {
-        
+        const outputPath = path.resolve(`${process.env.SF_PROGRAM_OUTPUT_FOLDER}${process.env.SF_TO_DEPLOY_FOLDER_NAME}`);
+        await fse.ensureDir(outputPath);
         //Check for File Existence/ Read permissions
         await fsp.access(src, fsp.constants.R_OK);
         //Get the stats of your source
@@ -119,7 +121,12 @@ async function createDeployablePackage(src, acceptedFileExtensions) {
             metadata: metadataObjects,
             consolidatedParseResults: consolidatedData
         });
-        return packageCreationResult;
+        
+        //Generated package.xml
+        const packagexml = await generatePackageXMLPromiseMaker(consolidatedData);
+        //Created package.xml
+        await fsp.writeFile(path.resolve(`${process.env.SF_PROGRAM_OUTPUT_FOLDER}${process.env.SF_TO_DEPLOY_FOLDER_NAME}/package.xml`),packagexml);
+        return {packageCreationResult,packagexml};
 
 
     } catch (err) {
@@ -133,6 +140,8 @@ createDeployablePackage(sourcePath, acceptedFileExtensions)
     })
     .catch((err) => {
         console.log(err);
-       
+        fse.emptyDir(path.resolve(`${process.env.SF_PROGRAM_OUTPUT_FOLDER}${process.env.SF_TO_DEPLOY_FOLDER_NAME}`), function(err){
+             console.log(err);
+        })
 
     });
