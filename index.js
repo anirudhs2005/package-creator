@@ -127,6 +127,7 @@ async function createDeployablePackage(src, acceptedFileExtensions) {
         
         //Generated package.xml
         const packagexml = await generatePackageXMLPromiseMaker(consolidatedData);
+        console.log(packagexml);
         //Created package.xml
         await fsp.writeFile(path.resolve(`${process.env.SF_PROGRAM_OUTPUT_FOLDER}${process.env.SF_TO_DEPLOY_FOLDER_NAME}/package.xml`),packagexml);
         return {packageCreationResult,packagexml};

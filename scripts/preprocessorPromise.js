@@ -28,8 +28,14 @@ function defaultCleanser(parseResult,resolve,reject){
  							
 					});
 				}
+				let trimmedType = d.type.trim();
+				if(trimmedType.indexOf('CustomLabel')!==-1){
+					trimmedType = 'CustomLabels';
+				}
+				const members= trimmedType.indexOf('CustomLabel')!==-1?['CustomLabels']:[...new Set(d.members.map(m=>m.trim()))];
+				
 				//Find the unique members in that type after trimming the members and return the result
-				return {type:d.type.trim(), members:[...new Set(d.members.map(m=>m.trim()))]};
+				return {type:trimmedType, members:members};
 			});
 			//Place back the cleansed data into the original parse result
 			parseResult.data = data;

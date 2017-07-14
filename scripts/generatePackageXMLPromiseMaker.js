@@ -8,17 +8,15 @@ function generatePackageXMLPromiseMaker(consolidatedData=[]){
 			<Package xmlns="http://soap.sforce.com/2006/04/metadata">
 				${[...consolidatedData]
 								 .map(([type,members])=>
-								       `
-										<types>
-										   ${members.map(member=>`<members>${member}</members>`).join('')}
+								       `<types>
+										   ${type.indexOf('CustomLabel')!==-1?'<members>*</members>':`${members.map(member=>`<members>${member}</members>`).join('')}`}
 										   <name>${type}</name>
 										</types>
 								       `
-								     )
+								     ).join('')
 				 }
 				<version>${process.env.SF_RETRIEVE_VERSION}</version>
-
-		</Package>`;
+		    </Package>`;
 		const prettyXML = pd.xml(packageXMLString);
 		resolve(prettyXML);
 
