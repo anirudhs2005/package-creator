@@ -144,10 +144,16 @@ createDeployablePackage(sourcePath, acceptedFileExtensions)
         console.log(`Finished Creating Files. Check output at  ${outputPath}`);
       })
     .catch((err) => {
-        console.log(err);
+        console.log(`
+ Error Code : ${err.code}
+ Error Message : ${err.message}
+ Error FilePath : ${err.filePath}
+ MetadataType : ${err.type}
+`);
         //Empty output directory if there is any error
         fse.emptyDir(path.resolve(`${process.env.SF_PROGRAM_OUTPUT_FOLDER}${process.env.SF_TO_DEPLOY_FOLDER_NAME}`), function(err){
-             console.log(err);
+             if(err)
+                console.log(err);
         })
 
     });
