@@ -125,7 +125,6 @@ async function createFolders(config) {
                     const files = members.filter(member => member.indexOf('/') !== -1);
                     //Result of copying files and their meta
                     const filesInsideFolderCopyResult = await Promise.all(files.map(async file => {
-                        console.log('File', file);
                         const [folder, fileName] = file.split('/');
                         const fileXMLPath = `${directoryName}/${folder}/${fileName}.${suffix}`;
                         const sourceFilePath = `${resolvedSourcePath}/${fileXMLPath}`;

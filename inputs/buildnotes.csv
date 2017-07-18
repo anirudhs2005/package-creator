@@ -1,10 +1,6 @@
 Name,Type
-NiceClass,ApexClass
-AnotherClass,ApexClass
-Case,CustomObject
-Case,CustomObject
-NiceClass,ApexClass
-BOOYA,ApexPage
-Boo,ApexPage
 Case,Workflow
-Simplest_CLASS,ApexClass
+Case,CustomObject
+Service_Console,CustomApplication
+Internal Zone,Community
+Case,Workflow
