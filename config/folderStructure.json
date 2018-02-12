@@ -124,6 +124,7 @@
 		{
 			"childXmlNames": [
 				"CustomField",
+				"Index",
 				"BusinessProcess",
 				"CompactLayout",
 				"RecordType",
@@ -244,18 +245,18 @@
 			"xmlName": "CustomApplication"
 		},
 		{
+			"directoryName": "portals",
+			"inFolder": false,
+			"metaFile": false,
+			"suffix": "portal",
+			"xmlName": "Portal"
+		},
+		{
 			"directoryName": "EmbeddedServiceConfig",
 			"inFolder": false,
 			"metaFile": false,
 			"suffix": "EmbeddedServiceConfig",
 			"xmlName": "EmbeddedServiceConfig"
-		},
-		{
-			"directoryName": "EmbeddedServiceLiveAgent",
-			"inFolder": false,
-			"metaFile": false,
-			"suffix": "EmbeddedServiceLiveAgent",
-			"xmlName": "EmbeddedServiceLiveAgent"
 		},
 		{
 			"directoryName": "EmbeddedServiceBranding",
@@ -277,6 +278,20 @@
 			"metaFile": false,
 			"suffix": "flowDefinition",
 			"xmlName": "FlowDefinition"
+		},
+		{
+			"directoryName": "eventSubscriptions",
+			"inFolder": false,
+			"metaFile": false,
+			"suffix": "subscription",
+			"xmlName": "EventSubscription"
+		},
+		{
+			"directoryName": "eventDeliveries",
+			"inFolder": false,
+			"metaFile": false,
+			"suffix": "delivery",
+			"xmlName": "EventDelivery"
 		},
 		{
 			"childXmlNames": [
@@ -423,6 +438,20 @@
 			"xmlName": "CustomMetadata"
 		},
 		{
+			"directoryName": "profilePasswordPolicies",
+			"inFolder": false,
+			"metaFile": false,
+			"suffix": "profilePasswordPolicy",
+			"xmlName": "ProfilePasswordPolicy"
+		},
+		{
+			"directoryName": "profileSessionSettings",
+			"inFolder": false,
+			"metaFile": false,
+			"suffix": "profileSessionSetting",
+			"xmlName": "ProfileSessionSetting"
+		},
+		{
 			"directoryName": "datacategorygroups",
 			"inFolder": false,
 			"metaFile": false,
@@ -528,6 +557,13 @@
 			"xmlName": "Community"
 		},
 		{
+			"directoryName": "ChatterExtensions",
+			"inFolder": false,
+			"metaFile": false,
+			"suffix": "ChatterExtension",
+			"xmlName": "ChatterExtension"
+		},
+		{
 			"directoryName": "callCenters",
 			"inFolder": false,
 			"metaFile": false,
@@ -598,6 +634,13 @@
 			"xmlName": "CommunityThemeDefinition"
 		},
 		{
+			"directoryName": "brandingSets",
+			"inFolder": false,
+			"metaFile": false,
+			"suffix": "brandingSet",
+			"xmlName": "BrandingSet"
+		},
+		{
 			"directoryName": "communityTemplateDefinitions",
 			"inFolder": false,
 			"metaFile": false,
@@ -657,34 +700,6 @@
 			"xmlName": "ActionLinkGroupTemplate"
 		},
 		{
-			"directoryName": "skills",
-			"inFolder": false,
-			"metaFile": false,
-			"suffix": "skill",
-			"xmlName": "Skill"
-		},
-		{
-			"directoryName": "liveChatDeployments",
-			"inFolder": false,
-			"metaFile": false,
-			"suffix": "liveChatDeployment",
-			"xmlName": "LiveChatDeployment"
-		},
-		{
-			"directoryName": "liveChatButtons",
-			"inFolder": false,
-			"metaFile": false,
-			"suffix": "liveChatButton",
-			"xmlName": "LiveChatButton"
-		},
-		{
-			"directoryName": "liveChatAgentConfigs",
-			"inFolder": false,
-			"metaFile": false,
-			"suffix": "liveChatAgentConfig",
-			"xmlName": "LiveChatAgentConfig"
-		},
-		{
 			"directoryName": "synonymDictionaries",
 			"inFolder": false,
 			"metaFile": false,
@@ -706,18 +721,25 @@
 			"xmlName": "LeadConvertSettings"
 		},
 		{
-			"directoryName": "liveChatSensitiveDataRule",
-			"inFolder": false,
-			"metaFile": false,
-			"suffix": "liveChatSensitiveDataRule",
-			"xmlName": "LiveChatSensitiveDataRule"
-		},
-		{
 			"directoryName": "cachePartitions",
 			"inFolder": false,
 			"metaFile": false,
 			"suffix": "cachePartition",
 			"xmlName": "PlatformCachePartition"
+		},
+		{
+			"directoryName": "assistantRecommendationTypes",
+			"inFolder": false,
+			"metaFile": false,
+			"suffix": "assistantRecommendationType",
+			"xmlName": "AssistantRecommendationType"
+		},
+		{
+			"directoryName": "insightTypes",
+			"inFolder": false,
+			"metaFile": false,
+			"suffix": "insightType",
+			"xmlName": "InsightType"
 		},
 		{
 			"directoryName": "settings",

@@ -1,6 +1,7 @@
 Name,Type
 Case,Workflow
+Admin,Profile
 Case,CustomObject
-Service_Console,CustomApplication
-Internal Zone,Community
-Case,Workflow
+RetailerHelpdeskCaseTrigger,ApexTrigger
+RetailHDSetCaseSLATriggerHandler,ApexClass
+RetailHDSetCaseSLATriggerHandlerTest,ApexClass
